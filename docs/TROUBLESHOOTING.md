@@ -298,7 +298,7 @@ except Exception as e:
 
 ## 추가 도움말
 
-- [GitHub Issues](https://github.com/yourusername/responsibleai_resource/issues)
+- [GitHub Issues](https://github.com/saewookkangboy/responsible-ai-resource/issues)
 - [API 레퍼런스](responsible_ai_automation/docs/api_reference.md)
 - [통합 가이드](docs/INTEGRATION_GUIDE.md)
 

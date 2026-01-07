@@ -12,8 +12,8 @@
 ### 1. 저장소 클론
 
 ```bash
-git clone https://github.com/yourusername/responsibleai_resource.git
-cd responsibleai_resource/responsible_ai_automation
+git clone https://github.com/saewookkangboy/responsible-ai-resource.git
+cd responsible-ai-resource/responsible_ai_automation
 ```
 
 ### 2. 가상 환경 생성 (권장)

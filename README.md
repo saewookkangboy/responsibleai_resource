@@ -7,7 +7,7 @@ AI 윤리와 Responsible AI 원칙을 적용하기 위한 종합 리소스 모�
 
 ## 🌐 언어 선택 / Language Selection
 
-**[한국어 (기본)](#한국어-버전-default) | [English](https://github.com/saewookkangboy/responsibleai_resource/blob/main/README_EN.md)**
+**[한국어 (기본)](#한국어-버전-default) | [English](https://github.com/saewookkangboy/responsible-ai-resource/blob/main/README_EN.md)**
 
 ---
 
@@ -33,7 +33,7 @@ This open source project was written and structured based on Cursor AI.
 ## 🎯 프로젝트 구조
 
 ```
-responsibleai_resource/
+responsible-ai-resource/
 ├── responsible_ai_automation/    # 강화 학습 기반 자동화 시스템
 ├── ai-platform-validator/        # AI 플랫폼 검증 시스템
 ├── responsible-ai-guidelines/    # 역할별 가이드라인
@@ -44,11 +44,19 @@ responsibleai_resource/
 
 AI 윤리와 Responsible AI 원칙을 자동으로 학습, 최적화, 적용하는 강화 학습 기반 시스템입니다.
 
+> **🆕 v0.2.0**: [Microsoft Responsible AI Toolbox](https://github.com/microsoft/responsible-ai-toolbox) 스타일의 새로운 분석 컴포넌트 추가!
+
 ### 주요 기능
 
 - **종합적인 Responsible AI 평가 프레임워크**
   - 공정성(Fairness), 투명성(Transparency), 책임성(Accountability)
   - 프라이버시(Privacy), 견고성(Robustness) 평가
+- **🆕 Microsoft RAI Toolbox 스타일 컴포넌트**
+  - **Error Analysis**: 모델 오류 분석 및 코호트 식별
+  - **Counterfactual Analysis**: 반사실적 설명 (DiCE 기반)
+  - **Causal Analysis**: 인과 관계 분석 (EconML 기반)
+  - **Data Balance**: 데이터 균형 분석
+  - **Responsible AI Dashboard**: 통합 분석 대시보드
 - **강화 학습 기반 자동 최적화** (PPO 알고리즘)
 - **지능형 자동 업데이트 시스템**
 - **실시간 모니터링 및 알림**
@@ -143,8 +151,8 @@ AI 윤리와 Responsible AI 원칙을 자동으로 학습, 최적화, 적용하�
 
 ```bash
 # 저장소 클론
-git clone https://github.com/yourusername/responsibleai_resource.git
-cd responsibleai_resource/responsible_ai_automation
+git clone https://github.com/saewookkangboy/responsible-ai-resource.git
+cd responsible-ai-resource/responsible_ai_automation
 
 # 의존성 설치
 pip install -r requirements.txt
@@ -158,8 +166,8 @@ python quick_start.py
 ### 1. 저장소 클론
 
 ```bash
-git clone https://github.com/yourusername/responsibleai_resource.git
-cd responsibleai_resource
+git clone https://github.com/saewookkangboy/responsible-ai-resource.git
+cd responsible-ai-resource
 ```
 
 ### 2. 프로젝트별 설치
@@ -292,12 +300,36 @@ This software was developed with assistance from Cursor AI
 
 **본 오픈소스는 영리/비영리 모든 영역에서 활용 가능합니다.**
 
+## 📓 Jupyter Notebook 예제
+
+`notebooks/` 디렉토리에서 튜토리얼 노트북을 확인하세요:
+
+- **01_responsible_ai_dashboard_tutorial.ipynb** - Responsible AI Dashboard 종합 튜토리얼
+
 ## 🔗 참고 자료
 
-- [Microsoft Responsible AI](https://www.microsoft.com/en-us/ai/responsible-ai)
-- [Google AI Principles](https://ai.google/principles/)
-- [EU AI Act](https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai)
-- [IEEE Ethically Aligned Design](https://ethicsinaction.ieee.org/)
+### Microsoft
+- [Microsoft Responsible AI Toolbox](https://github.com/microsoft/responsible-ai-toolbox) - 본 프로젝트의 주요 레퍼런스
+- [Microsoft Responsible AI](https://www.microsoft.com/ko-kr/ai/responsible-ai) - Microsoft의 책임 있는 AI 원칙
+- [Responsible AI Toolbox Dashboard](https://responsibleaitoolbox.ai/) - RAI Toolbox 공식 사이트
+- [DiCE - Counterfactual Explanations](https://github.com/interpretml/DiCE)
+- [EconML - Causal Inference](https://github.com/microsoft/EconML)
+
+### Google
+- [Google AI Principles](https://ai.google/principles/) - Google AI 원칙
+- [Google Responsible AI Research](https://research.google/teams/responsible-ai/) - Google 책임 있는 AI 연구팀
+- [Vertex AI Safety Overview](https://docs.cloud.google.com/vertex-ai/generative-ai/docs/learn/safety-overview?hl=ko) - Vertex AI 안전성 개요
+
+### AWS
+- [AWS Responsible AI](https://aws.amazon.com/ko/ai/responsible-ai/) - AWS 책임 있는 AI
+
+### IBM
+- [IBM Responsible AI](https://www.ibm.com/think/topics/responsible-ai) - IBM 책임 있는 AI
+
+### 기타
+- [Center for Responsible AI](https://centerforresponsible.ai/resources-and-insights/) - 책임 있는 AI 센터
+- [EU AI Act](https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai) - EU AI 규제 프레임워크
+- [IEEE Ethically Aligned Design](https://ethicsinaction.ieee.org/) - IEEE 윤리적 설계
 
 ## ⚠️ 면책 조항
 

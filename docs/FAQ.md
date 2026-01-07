@@ -184,7 +184,7 @@ system.run_continuous_monitoring()
 
 ### Q21: 버그를 발견했습니다. 어디에 보고하나요?
 
-**A**: GitHub Issues에 버그 리포트를 작성해주세요: https://github.com/yourusername/responsibleai_resource/issues
+**A**: GitHub Issues에 버그 리포트를 작성해주세요: https://github.com/saewookkangboy/responsible-ai-resource/issues
 
 ### Q22: 추가 질문이 있습니다. 어디에 문의하나요?
 
