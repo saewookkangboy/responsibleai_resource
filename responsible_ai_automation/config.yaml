@@ -25,7 +25,7 @@ evaluation:
 
 # 강화 학습 설정
 reinforcement_learning:
-  algorithm: "PPO"  # PPO, SAC, TD3 등
+  algorithm: "PPO"  # PPO, SAC, TD3, A2C
   learning_rate: 3e-4
   batch_size: 64
   buffer_size: 100000
@@ -34,6 +34,9 @@ reinforcement_learning:
   training_steps: 100000
   evaluation_frequency: 1000
   save_frequency: 5000
+  # 성능 최적화
+  use_gpu: false  # GPU 사용 여부
+  n_jobs: -1  # 병렬 처리 (-1: 모든 코어 사용)
 
 # 자동 업데이트 설정
 auto_update:
@@ -70,10 +73,30 @@ monitoring:
   metrics_retention_days: 30
   alert_channels:
     - "console"
+  # 성능 최적화
+  sample_rate: 1.0  # 메트릭 샘플링 비율 (1.0: 전체 저장)
+  batch_logging: true  # 배치 로깅 활성화
 
 # 모델 설정
 model:
   save_path: "./models"
   checkpoint_frequency: 1000
   max_checkpoints: 10
+
+# 성능 최적화 설정
+performance:
+  use_parallel: true  # 병렬 처리 활성화
+  n_jobs: -1  # 병렬 작업 수 (-1: 모든 코어)
+  cache_enabled: true  # 캐싱 활성화
+  cache_size: 100  # 캐시 크기
+  sample_size: null  # 평가 샘플 크기 (null: 전체 사용)
+  streaming: false  # 스트리밍 평가 (대용량 데이터용)
+
+# 규제 준수 설정
+compliance:
+  eu_ai_act:
+    enabled: true
+  gdpr:
+    enabled: true
+    data_retention_days: 365
 

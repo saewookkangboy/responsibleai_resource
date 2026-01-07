@@ -37,12 +37,12 @@ class ResponsibleAIAutomationSystem:
         )
         self.logger = logging.getLogger(__name__)
 
-        # 컴포넌트 초기화
-        self.evaluator = ComprehensiveEvaluator(self.config)
-        self.updater = ModelUpdater(self.config, self.evaluator)
-        self.rollback_manager = RollbackManager(self.config)
-        self.dashboard = MonitoringDashboard(self.config)
-        self.alert_manager = AlertManager(self.config)
+        # 컴포넌트 지연 초기화 (성능 최적화)
+        self._evaluator = None
+        self._updater = None
+        self._rollback_manager = None
+        self._dashboard = None
+        self._alert_manager = None
 
         # 모델 및 데이터 저장
         self.model: Optional[Any] = None
@@ -52,6 +52,41 @@ class ResponsibleAIAutomationSystem:
         self.previous_metrics: Optional[Dict[str, Any]] = None
 
         self.logger.info("Responsible AI Automation 시스템 초기화 완료")
+    
+    @property
+    def evaluator(self):
+        """평가자 지연 로딩"""
+        if self._evaluator is None:
+            self._evaluator = ComprehensiveEvaluator(self.config)
+        return self._evaluator
+    
+    @property
+    def updater(self):
+        """업데이터 지연 로딩"""
+        if self._updater is None:
+            self._updater = ModelUpdater(self.config, self.evaluator)
+        return self._updater
+    
+    @property
+    def rollback_manager(self):
+        """롤백 매니저 지연 로딩"""
+        if self._rollback_manager is None:
+            self._rollback_manager = RollbackManager(self.config)
+        return self._rollback_manager
+    
+    @property
+    def dashboard(self):
+        """대시보드 지연 로딩"""
+        if self._dashboard is None:
+            self._dashboard = MonitoringDashboard(self.config)
+        return self._dashboard
+    
+    @property
+    def alert_manager(self):
+        """알림 매니저 지연 로딩"""
+        if self._alert_manager is None:
+            self._alert_manager = AlertManager(self.config)
+        return self._alert_manager
 
     def initialize_model(
         self,

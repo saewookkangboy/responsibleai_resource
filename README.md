@@ -139,6 +139,22 @@ AI 윤리와 Responsible AI 원칙을 자동으로 학습, 최적화, 적용하�
 
 ## 🚀 빠른 시작
 
+### ⚡ 5분 빠른 시작 (권장)
+
+```bash
+# 저장소 클론
+git clone https://github.com/yourusername/responsibleai_resource.git
+cd responsibleai_resource/responsible_ai_automation
+
+# 의존성 설치
+pip install -r requirements.txt
+
+# 빠른 시작 스크립트 실행
+python quick_start.py
+```
+
+**자세한 내용**: [빠른 시작 가이드](responsible_ai_automation/QUICK_START.md)
+
 ### 1. 저장소 클론
 
 ```bash

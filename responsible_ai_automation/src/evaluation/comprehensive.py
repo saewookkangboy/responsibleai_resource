@@ -65,6 +65,22 @@ class ComprehensiveEvaluator:
         Returns:
             종합 평가 결과 딕셔너리
         """
+        # 성능 최적화: 데이터 샘플링 (설정된 경우)
+        try:
+            from ..utils.optimization import optimize_data_for_evaluation
+            X_opt, y_opt = optimize_data_for_evaluation(X, y, self.config)
+            
+            # 샘플링된 경우 y_pred도 조정
+            if len(X_opt) < len(X):
+                indices = np.random.choice(len(X), len(X_opt), replace=False)
+                y_pred = y_pred[indices]
+                if sensitive_features is not None:
+                    sensitive_features = sensitive_features.iloc[indices].reset_index(drop=True)
+                X, y = X_opt, y_opt
+        except (ImportError, AttributeError):
+            # optimization 모듈이 없는 경우 그대로 진행
+            pass
+        
         results = {}
 
         # 공정성 평가

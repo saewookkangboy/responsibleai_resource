@@ -130,6 +130,16 @@ print(f"투명성 점수: {metrics['transparency']['overall_transparency_score']
 
 더 자세한 예제는 `example_usage.py` 파일을 참조하세요.
 
+## ⚡ 빠른 시작
+
+5분 안에 시작하려면:
+
+```bash
+python quick_start.py
+```
+
+**자세한 내용**: [빠른 시작 가이드](QUICK_START.md) | [설치 가이드](INSTALL.md) | [성능 최적화](OPTIMIZATION.md)
+
 ## 📁 프로젝트 구조
 
 ```
