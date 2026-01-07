@@ -7,7 +7,7 @@ AI 윤리와 Responsible AI 원칙을 적용하기 위한 종합 리소스 모�
 
 ## 🌐 언어 선택 / Language Selection
 
-**[한국어 (기본)](#한국어-버전-default) | [English]([#english-version](https://github.com/saewookkangboy/responsibleai_resource/blob/main/README_EN.md))**
+**[한국어 (기본)](#한국어-버전-default) | [English](https://github.com/saewookkangboy/responsibleai_resource/blob/main/README_EN.md)**
 
 ---
 
