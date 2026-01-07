@@ -11,9 +11,21 @@ AI 윤리와 Responsible AI 원칙을 적용하기 위한 종합 리소스 모�
 3. **Responsible AI Guidelines** - 역할별 가이드라인 및 체크리스트
 4. **Responsible AI Policy** - 정책 프레임워크 및 템플릿
 
+## 🌐 언어 선택 / Language Selection
+
+**[한국어](#korean-version) | [English](#english-version)**
+
 ---
 
-# 한국어 버전
+## 💡 개발 정보
+
+**해당 오픈 소스는 Cursor AI를 기반으로 작성 및 구성되었습니다.**
+
+This open source project was written and structured based on Cursor AI.
+
+---
+
+# 한국어 버전 {#korean-version}
 
 ## 🎯 프로젝트 구조
 
@@ -243,7 +255,7 @@ pip install -r requirements.txt
 
 ---
 
-# English Version
+# English Version {#english-version}
 
 ## 🎯 Project Structure
 
@@ -534,4 +546,4 @@ These tools help automatically evaluate and optimize Responsible AI principles, 
 
 ---
 
-**Last Updated**: 2025-01-07
+**Last Updated**: 2026-01-07
