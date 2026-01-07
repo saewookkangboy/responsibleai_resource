@@ -28,6 +28,8 @@ models/
 *.pkl
 *.h5
 *.ckpt
+*.pt
+*.pth
 logs/
 tensorboard_logs/
 monitoring_logs/
@@ -48,8 +50,26 @@ Thumbs.db
 
 # Jupyter
 .ipynb_checkpoints/
+*.ipynb
 
 # Environment
 .env
 .env.local
+.env.*.local
+
+# Testing
+.coverage
+.pytest_cache/
+htmlcov/
+.tox/
+.hypothesis/
+
+# Documentation
+docs/_build/
+docs/.doctrees/
+
+# MyPy
+.mypy_cache/
+.dmypy.json
+dmypy.json
 

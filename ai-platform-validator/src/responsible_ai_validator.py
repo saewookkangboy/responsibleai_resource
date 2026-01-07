@@ -1,0 +1,1 @@
+# Responsible AI 검증 - 나중에 구현
