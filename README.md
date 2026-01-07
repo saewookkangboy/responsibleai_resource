@@ -2,18 +2,9 @@
 
 AI 윤리와 Responsible AI 원칙을 적용하기 위한 종합 리소스 모음입니다.
 
-## 📋 프로젝트 개요
-
-이 저장소는 Responsible AI 구현을 위한 4개의 주요 프로젝트로 구성되어 있습니다:
-
-1. **Responsible AI Automation** - 강화 학습 기반 자동화 시스템
-2. **AI Platform Validator** - 생성형 AI 플랫폼 API 검증 시스템
-3. **Responsible AI Guidelines** - 역할별 가이드라인 및 체크리스트
-4. **Responsible AI Policy** - 정책 프레임워크 및 템플릿
-
 ## 🌐 언어 선택 / Language Selection
 
-**[한국어](#korean-version) | [English](#english-version)**
+**[한국어 (기본)](#한국어-버전-default) | [English](#english-version)**
 
 ---
 
@@ -25,7 +16,16 @@ This open source project was written and structured based on Cursor AI.
 
 ---
 
-# 한국어 버전 {#korean-version}
+# 한국어 버전 (Default) {#한국어-버전-default}
+
+## 📋 프로젝트 개요
+
+이 저장소는 Responsible AI 구현을 위한 4개의 주요 프로젝트로 구성되어 있습니다:
+
+1. **Responsible AI Automation** - 강화 학습 기반 자동화 시스템
+2. **AI Platform Validator** - 생성형 AI 플랫폼 API 검증 시스템
+3. **Responsible AI Guidelines** - 역할별 가이드라인 및 체크리스트
+4. **Responsible AI Policy** - 정책 프레임워크 및 템플릿
 
 ## 🎯 프로젝트 구조
 
@@ -256,6 +256,15 @@ pip install -r requirements.txt
 ---
 
 # English Version {#english-version}
+
+## 📋 Project Overview
+
+This repository consists of 4 main projects for implementing Responsible AI:
+
+1. **Responsible AI Automation** - Reinforcement Learning-based Automation System
+2. **AI Platform Validator** - Generative AI Platform API Validation System
+3. **Responsible AI Guidelines** - Role-based Guidelines and Checklists
+4. **Responsible AI Policy** - Policy Framework and Templates
 
 ## 🎯 Project Structure
 
