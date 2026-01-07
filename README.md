@@ -254,6 +254,8 @@ pip install -r requirements.txt
 
 각 프로젝트는 MIT 라이선스를 따릅니다. 자세한 내용은 각 프로젝트의 LICENSE 파일을 참조하세요.
 
+**본 오픈소스는 영리/비영리 모든 영역에서 활용 가능합니다.**
+
 ## 🔗 참고 자료
 
 - [Microsoft Responsible AI](https://www.microsoft.com/en-us/ai/responsible-ai)
@@ -492,6 +494,8 @@ Each project can be contributed to independently. Please refer to each project's
 ## 📄 License
 
 Each project follows the MIT License. For details, please refer to each project's LICENSE file.
+
+**This open source project can be used in all commercial and non-commercial areas.**
 
 ## 🔗 References
 
