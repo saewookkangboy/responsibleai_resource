@@ -1,162 +1,207 @@
 """
-EU AI Act 규정 준수 검증 모듈
+EU AI Act 준수 검증 모듈
 """
 
 from typing import Dict, Any, List, Optional
+from dataclasses import dataclass
 from datetime import datetime
+import logging
 
 
-class EUAIActCompliance:
-    """EU AI Act 규정 준수 검증 클래스"""
+@dataclass
+class EUAIActComplianceResult:
+    """EU AI Act 준수 검증 결과"""
+    status: str
+    risk_level: str
+    compliance_score: float
+    requirements_met: List[str]
+    requirements_failed: List[str]
+    details: Dict[str, Any]
+
+
+class EUAIActValidator:
+    """EU AI Act 준수 검증 클래스"""
 
     RISK_LEVELS = {
-        "unacceptable": "허용 불가",
-        "high": "고위험",
+        "minimal": "최소 위험",
         "limited": "제한적 위험",
-        "minimal": "최소 위험"
+        "high": "높은 위험",
+        "unacceptable": "허용 불가 위험"
     }
 
-    def __init__(self, config: Optional[Dict[str, Any]] = None):
+    def __init__(self, config: Dict[str, Any]):
         """
         Args:
-            config: 설정 딕셔너리
+            config: EU AI Act 설정
         """
-        self.config = config or {}
+        self.config = config.get("compliance", {}).get("eu_ai_act", {})
+        self.enabled = self.config.get("enabled", True)
+        self.logger = logging.getLogger(__name__)
 
-    def assess_risk_level(self, metrics: Dict[str, Any]) -> str:
+    def validate(
+        self,
+        model_info: Dict[str, Any],
+        use_case: str,
+        metrics: Optional[Dict[str, Any]] = None
+    ) -> EUAIActComplianceResult:
         """
-        위험 수준 평가
+        EU AI Act 준수 검증 수행
 
         Args:
-            metrics: Responsible AI 메트릭
+            model_info: 모델 정보
+            use_case: 사용 사례
+            metrics: Responsible AI 평가 메트릭
+
+        Returns:
+            EU AI Act 준수 검증 결과
+        """
+        if not self.enabled:
+            return EUAIActComplianceResult(
+                status="skipped",
+                risk_level="unknown",
+                compliance_score=0.0,
+                requirements_met=[],
+                requirements_failed=[],
+                details={"message": "EU AI Act 검증이 비활성화되어 있습니다."}
+            )
+
+        # 위험 수준 결정
+        risk_level = self._determine_risk_level(use_case, model_info)
+
+        # 요구사항 검증
+        requirements_met, requirements_failed = self._check_requirements(
+            risk_level, model_info, metrics
+        )
+
+        # 준수 점수 계산
+        total_requirements = len(requirements_met) + len(requirements_failed)
+        compliance_score = len(requirements_met) / total_requirements if total_requirements > 0 else 0.0
+
+        # 상태 결정
+        if compliance_score >= 0.9:
+            status = "compliant"
+        elif compliance_score >= 0.7:
+            status = "mostly_compliant"
+        else:
+            status = "non_compliant"
+
+        return EUAIActComplianceResult(
+            status=status,
+            risk_level=risk_level,
+            compliance_score=compliance_score,
+            requirements_met=requirements_met,
+            requirements_failed=requirements_failed,
+            details={
+                "risk_level_description": self.RISK_LEVELS.get(risk_level, "알 수 없음"),
+                "validation_date": datetime.now().isoformat(),
+            }
+        )
+
+    def _determine_risk_level(self, use_case: str, model_info: Dict[str, Any]) -> str:
+        """
+        위험 수준 결정
+
+        Args:
+            use_case: 사용 사례
+            model_info: 모델 정보
 
         Returns:
             위험 수준
         """
-        overall_score = metrics.get("overall_responsible_ai_score", 0.0)
-        
-        if overall_score < 0.5:
-            return "unacceptable"
-        elif overall_score < 0.65:
+        # 사용 사례 기반 위험 수준 매핑
+        high_risk_cases = [
+            "credit_scoring",
+            "recruitment",
+            "criminal_justice",
+            "biometric_identification",
+        ]
+
+        limited_risk_cases = [
+            "recommendation",
+            "content_moderation",
+            "chatbot",
+        ]
+
+        if use_case in high_risk_cases:
             return "high"
-        elif overall_score < 0.8:
+        elif use_case in limited_risk_cases:
             return "limited"
         else:
             return "minimal"
 
-    def check_requirements(self, metrics: Dict[str, Any]) -> Dict[str, Any]:
+    def _check_requirements(
+        self,
+        risk_level: str,
+        model_info: Dict[str, Any],
+        metrics: Optional[Dict[str, Any]]
+    ) -> tuple[List[str], List[str]]:
         """
-        EU AI Act 요구사항 확인
+        요구사항 검증
 
         Args:
-            metrics: Responsible AI 메트릭
+            risk_level: 위험 수준
+            model_info: 모델 정보
+            metrics: Responsible AI 평가 메트릭
 
         Returns:
-            요구사항 준수 결과
+            (충족된 요구사항, 미충족 요구사항)
         """
-        results = {
-            "risk_level": self.assess_risk_level(metrics),
-            "requirements": {},
-            "compliant": True,
-            "timestamp": datetime.now().isoformat()
-        }
+        requirements_met = []
+        requirements_failed = []
 
-        # 요구사항 1: 투명성
-        transparency_score = metrics.get("transparency", {}).get("overall_transparency_score", 0.0)
-        results["requirements"]["transparency"] = {
-            "required": True,
-            "score": transparency_score,
-            "compliant": transparency_score >= 0.7,
-            "description": "AI 시스템의 투명성 및 설명 가능성"
-        }
+        # 공통 요구사항
+        if model_info.get("transparency", False):
+            requirements_met.append("투명성")
+        else:
+            requirements_failed.append("투명성")
 
-        # 요구사항 2: 공정성
-        fairness_score = metrics.get("fairness", {}).get("overall_fairness_score", 0.0)
-        results["requirements"]["fairness"] = {
-            "required": True,
-            "score": fairness_score,
-            "compliant": fairness_score >= 0.7,
-            "description": "편향 없는 공정한 AI 시스템"
-        }
+        if model_info.get("human_oversight", False):
+            requirements_met.append("인간 감독")
+        else:
+            requirements_failed.append("인간 감독")
 
-        # 요구사항 3: 프라이버시
-        privacy_score = metrics.get("privacy", {}).get("overall_privacy_score", 0.0)
-        results["requirements"]["privacy"] = {
-            "required": True,
-            "score": privacy_score,
-            "compliant": privacy_score >= 0.8,
-            "description": "개인정보 보호 및 데이터 프라이버시"
-        }
+        # 높은 위험 수준 요구사항
+        if risk_level == "high":
+            if metrics and metrics.get("overall_responsible_ai_score", 0.0) >= 0.8:
+                requirements_met.append("높은 Responsible AI 점수")
+            else:
+                requirements_failed.append("높은 Responsible AI 점수")
 
-        # 요구사항 4: 견고성
-        robustness_score = metrics.get("robustness", {}).get("overall_robustness_score", 0.0)
-        results["requirements"]["robustness"] = {
-            "required": True,
-            "score": robustness_score,
-            "compliant": robustness_score >= 0.75,
-            "description": "안전하고 신뢰할 수 있는 AI 시스템"
-        }
+            if model_info.get("risk_management", False):
+                requirements_met.append("위험 관리 시스템")
+            else:
+                requirements_failed.append("위험 관리 시스템")
 
-        # 요구사항 5: 책임성
-        accountability_score = metrics.get("accountability", {}).get("overall_accountability_score", 0.0)
-        results["requirements"]["accountability"] = {
-            "required": True,
-            "score": accountability_score,
-            "compliant": accountability_score >= 0.7,
-            "description": "명확한 책임 소재 및 감사 추적"
-        }
+            if model_info.get("data_governance", False):
+                requirements_met.append("데이터 거버넌스")
+            else:
+                requirements_failed.append("데이터 거버넌스")
 
-        # 전체 준수 여부
-        results["compliant"] = all(
-            req["compliant"] for req in results["requirements"].values()
-        )
+        return requirements_met, requirements_failed
 
-        return results
-
-    def generate_compliance_report(self, metrics: Dict[str, Any]) -> Dict[str, Any]:
+    def generate_compliance_report(self, result: EUAIActComplianceResult) -> str:
         """
-        규정 준수 리포트 생성
+        준수 리포트 생성
 
         Args:
-            metrics: Responsible AI 메트릭
+            result: 검증 결과
 
         Returns:
-            규정 준수 리포트
+            리포트 문자열
         """
-        compliance_check = self.check_requirements(metrics)
-        
-        report = {
-            "regulation": "EU AI Act",
-            "assessment_date": datetime.now().isoformat(),
-            "risk_level": compliance_check["risk_level"],
-            "risk_level_description": self.RISK_LEVELS.get(compliance_check["risk_level"], "알 수 없음"),
-            "overall_compliant": compliance_check["compliant"],
-            "requirements": compliance_check["requirements"],
-            "recommendations": self._generate_recommendations(compliance_check)
-        }
+        report = f"""
+EU AI Act 준수 검증 리포트
+==========================
 
+검증 일시: {result.details.get('validation_date', 'N/A')}
+위험 수준: {result.risk_level} ({result.details.get('risk_level_description', 'N/A')})
+준수 점수: {result.compliance_score:.2%}
+상태: {result.status}
+
+충족된 요구사항:
+{chr(10).join(f'  ✓ {req}' for req in result.requirements_met)}
+
+미충족 요구사항:
+{chr(10).join(f'  ✗ {req}' for req in result.requirements_failed)}
+"""
         return report
-
-    def _generate_recommendations(self, compliance_check: Dict[str, Any]) -> List[str]:
-        """
-        개선 권장사항 생성
-
-        Args:
-            compliance_check: 준수 확인 결과
-
-        Returns:
-            권장사항 리스트
-        """
-        recommendations = []
-
-        for req_name, req_data in compliance_check["requirements"].items():
-            if not req_data["compliant"]:
-                recommendations.append(
-                    f"{req_name} 점수를 {req_data['score']:.2f}에서 0.7 이상으로 개선해야 합니다."
-                )
-
-        if not recommendations:
-            recommendations.append("모든 EU AI Act 요구사항을 충족하고 있습니다.")
-
-        return recommendations
-

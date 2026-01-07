@@ -1,49 +1,39 @@
 """
-모니터링 대시보드 모듈
+모니터링 대시보드 모듈 (하위 호환성을 위한 래퍼)
 """
 
 import logging
-from typing import Dict, Any, List, Optional
-from datetime import datetime
+from typing import Dict, Any, Optional
+from .dashboard_factory import DashboardFactory
 
 
 class MonitoringDashboard:
-    """모니터링 대시보드 클래스"""
+    """모니터링 대시보드 클래스 (하위 호환성 래퍼)"""
 
     def __init__(self, config: Dict[str, Any]):
         """
         Args:
             config: 모니터링 설정 딕셔너리
         """
-        self.config = config.get("monitoring", {})
-        self.enabled = self.config.get("enabled", True)
-        self.port = self.config.get("dashboard_port", 8080)
-        self.metrics_history: List[Dict[str, Any]] = []
-        self.retention_days = self.config.get("metrics_retention_days", 30)
-
+        self.config = config
         self.logger = logging.getLogger(__name__)
+        
+        # 팩토리를 통해 실제 대시보드 인스턴스 생성
+        self._dashboard = DashboardFactory.get_default(config)
+        if self._dashboard is None:
+            # 기본값으로 콘솔 대시보드 사용
+            self._dashboard = DashboardFactory.create("console", config)
 
-    def log_metrics(self, metrics: Dict[str, Any]):
+    def log_metrics(self, metrics: Dict[str, Any]) -> None:
         """
         메트릭 기록
 
         Args:
             metrics: 평가 지표 딕셔너리
         """
-        if not self.enabled:
-            return
-
-        entry = {
-            "timestamp": datetime.now().isoformat(),
-            "metrics": metrics,
-        }
-
-        self.metrics_history.append(entry)
-
-        # 오래된 메트릭 제거
-        self._cleanup_old_metrics()
-
-        self.logger.info(f"메트릭 기록: {metrics.get('overall_responsible_ai_score', 0.0):.3f}")
+        if self._dashboard:
+            self._dashboard.log_metrics(metrics)
+            self.logger.info(f"메트릭 기록: {metrics.get('overall_responsible_ai_score', 0.0):.3f}")
 
     def get_latest_metrics(self) -> Optional[Dict[str, Any]]:
         """
@@ -52,12 +42,11 @@ class MonitoringDashboard:
         Returns:
             최신 평가 지표 또는 None
         """
-        if not self.metrics_history:
-            return None
+        if self._dashboard:
+            return self._dashboard.get_latest_metrics()
+        return None
 
-        return self.metrics_history[-1]["metrics"]
-
-    def get_metrics_history(self, limit: Optional[int] = None) -> List[Dict[str, Any]]:
+    def get_metrics_history(self, limit: Optional[int] = None):
         """
         메트릭 히스토리 조회
 
@@ -67,29 +56,14 @@ class MonitoringDashboard:
         Returns:
             메트릭 히스토리 리스트
         """
-        if limit is None:
-            return self.metrics_history
+        if self._dashboard:
+            return self._dashboard.get_metrics_history(limit)
+        return []
 
-        return self.metrics_history[-limit:]
-
-    def _cleanup_old_metrics(self):
-        """오래된 메트릭 정리"""
-        from datetime import timedelta
-
-        cutoff_date = datetime.now() - timedelta(days=self.retention_days)
-
-        self.metrics_history = [
-            entry
-            for entry in self.metrics_history
-            if datetime.fromisoformat(entry["timestamp"]) >= cutoff_date
-        ]
-
-    def start_dashboard(self):
-        """대시보드 시작 (실제 구현에서는 웹 서버 시작)"""
-        if not self.enabled:
-            self.logger.info("모니터링이 비활성화되어 있습니다.")
-            return
-
-        self.logger.info(f"모니터링 대시보드 시작 (포트: {self.port})")
-        # 실제 구현에서는 Flask/FastAPI 등을 사용하여 웹 대시보드 구현
+    def start_dashboard(self) -> None:
+        """대시보드 시작"""
+        if self._dashboard:
+            self._dashboard.start()
+        else:
+            self.logger.warning("대시보드를 시작할 수 없습니다.")
 

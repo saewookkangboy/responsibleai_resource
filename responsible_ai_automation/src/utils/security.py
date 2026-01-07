@@ -1,127 +1,294 @@
 """
-보안 유틸리티 모듈
+보안 유틸리티 - API 키 관리, Rate Limiting 등
 """
 
 import os
+import hashlib
+import secrets
+from typing import Dict, Any, Optional, List
+from datetime import datetime, timedelta
+from collections import defaultdict
 import logging
-from typing import Optional
-from cryptography.fernet import Fernet
-from cryptography.hazmat.primitives import hashes
-from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
-from cryptography.hazmat.backends import default_backend
-import base64
 
-logger = logging.getLogger(__name__)
+try:
+    from cryptography.fernet import Fernet
+    from cryptography.hazmat.primitives import hashes
+    from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+    from cryptography.hazmat.backends import default_backend
+    import base64
+    CRYPTOGRAPHY_AVAILABLE = True
+except ImportError:
+    CRYPTOGRAPHY_AVAILABLE = False
 
 
-class SecurityManager:
-    """보안 관리 클래스"""
+class APIKeyManager:
+    """API 키 관리 클래스"""
 
-    def __init__(self, encryption_key: Optional[str] = None):
+    def __init__(self, config: Dict[str, Any]):
         """
         Args:
-            encryption_key: 암호화 키 (None이면 환경 변수에서 로드)
+            config: 보안 설정
         """
-        self.encryption_key = encryption_key or os.getenv("ENCRYPTION_KEY")
-        if not self.encryption_key:
-            logger.warning("암호화 키가 설정되지 않았습니다. 보안 기능이 제한됩니다.")
-            self.cipher = None
-        else:
-            self.cipher = self._create_cipher(self.encryption_key)
+        self.config = config.get("security", {})
+        self.key_storage_path = self.config.get("key_storage_path", "./.keys")
+        self.logger = logging.getLogger(__name__)
 
-    def _create_cipher(self, key: str) -> Fernet:
+        # 키 저장소 디렉토리 생성
+        os.makedirs(self.key_storage_path, exist_ok=True)
+
+    def get_api_key(self, key_name: str, from_env: bool = True) -> Optional[str]:
         """
-        Fernet 암호화 객체 생성
+        API 키 조회
 
         Args:
-            key: 암호화 키
+            key_name: 키 이름
+            from_env: 환경 변수에서 먼저 조회할지 여부
 
         Returns:
-            Fernet 암호화 객체
+            API 키 또는 None
         """
-        # 키를 32바이트로 변환
+        if from_env:
+            env_key = os.getenv(key_name)
+            if env_key:
+                return env_key
+
+        # 파일에서 조회 (암호화된 경우)
+        key_file = os.path.join(self.key_storage_path, f"{key_name}.key")
+        if os.path.exists(key_file):
+            try:
+                with open(key_file, "r") as f:
+                    encrypted_key = f.read().strip()
+                return self._decrypt_key(encrypted_key)
+            except Exception as e:
+                self.logger.error(f"키 파일 읽기 실패: {e}")
+                return None
+
+        return None
+
+    def store_api_key(self, key_name: str, key_value: str, encrypt: bool = True) -> bool:
+        """
+        API 키 저장
+
+        Args:
+            key_name: 키 이름
+            key_value: 키 값
+            encrypt: 암호화 여부
+
+        Returns:
+            저장 성공 여부
+        """
+        try:
+            if encrypt and CRYPTOGRAPHY_AVAILABLE:
+                encrypted_key = self._encrypt_key(key_value)
+            else:
+                encrypted_key = key_value
+
+            key_file = os.path.join(self.key_storage_path, f"{key_name}.key")
+            with open(key_file, "w") as f:
+                f.write(encrypted_key)
+
+            # 파일 권한 설정 (소유자만 읽기/쓰기)
+            os.chmod(key_file, 0o600)
+
+            self.logger.info(f"API 키 저장 완료: {key_name}")
+            return True
+        except Exception as e:
+            self.logger.error(f"API 키 저장 실패: {e}")
+            return False
+
+    def rotate_api_key(self, key_name: str) -> Optional[str]:
+        """
+        API 키 로테이션
+
+        Args:
+            key_name: 키 이름
+
+        Returns:
+            새 API 키 또는 None
+        """
+        # 새 키 생성
+        new_key = secrets.token_urlsafe(32)
+
+        if self.store_api_key(key_name, new_key):
+            self.logger.info(f"API 키 로테이션 완료: {key_name}")
+            return new_key
+
+        return None
+
+    def _encrypt_key(self, key: str) -> str:
+        """키 암호화"""
+        if not CRYPTOGRAPHY_AVAILABLE:
+            return key
+
+        # 마스터 키 생성 (실제로는 안전한 곳에 저장해야 함)
+        master_key = os.getenv("MASTER_ENCRYPTION_KEY", Fernet.generate_key().decode())
         kdf = PBKDF2HMAC(
             algorithm=hashes.SHA256(),
             length=32,
-            salt=b'responsible_ai_salt',
+            salt=b"responsible_ai_salt",
             iterations=100000,
             backend=default_backend()
         )
-        key_bytes = kdf.derive(key.encode())
-        return Fernet(base64.urlsafe_b64encode(key_bytes))
+        key_bytes = base64.urlsafe_b64encode(kdf.derive(master_key.encode()))
+        fernet = Fernet(key_bytes)
 
-    def encrypt(self, data: str) -> Optional[str]:
-        """
-        데이터 암호화
+        return fernet.encrypt(key.encode()).decode()
 
-        Args:
-            data: 암호화할 데이터
-
-        Returns:
-            암호화된 데이터 또는 None
-        """
-        if not self.cipher:
-            logger.error("암호화 키가 설정되지 않아 암호화할 수 없습니다.")
-            return None
+    def _decrypt_key(self, encrypted_key: str) -> str:
+        """키 복호화"""
+        if not CRYPTOGRAPHY_AVAILABLE:
+            return encrypted_key
 
         try:
-            encrypted = self.cipher.encrypt(data.encode())
-            return encrypted.decode()
-        except Exception as e:
-            logger.error(f"암호화 중 오류 발생: {e}")
-            return None
+            master_key = os.getenv("MASTER_ENCRYPTION_KEY", Fernet.generate_key().decode())
+            kdf = PBKDF2HMAC(
+                algorithm=hashes.SHA256(),
+                length=32,
+                salt=b"responsible_ai_salt",
+                iterations=100000,
+                backend=default_backend()
+            )
+            key_bytes = base64.urlsafe_b64encode(kdf.derive(master_key.encode()))
+            fernet = Fernet(key_bytes)
 
-    def decrypt(self, encrypted_data: str) -> Optional[str]:
+            return fernet.decrypt(encrypted_key.encode()).decode()
+        except Exception as e:
+            self.logger.error(f"키 복호화 실패: {e}")
+            return encrypted_key
+
+
+class RateLimiter:
+    """Rate Limiting 클래스"""
+
+    def __init__(self, config: Dict[str, Any]):
         """
-        데이터 복호화
+        Args:
+            config: Rate Limiting 설정
+        """
+        self.config = config.get("security", {}).get("rate_limiting", {})
+        self.enabled = self.config.get("enabled", True)
+        self.default_limit = self.config.get("limit", 100)  # 기본: 시간당 100회
+        self.window_seconds = self.config.get("window_seconds", 3600)  # 기본: 1시간
+
+        # IP/사용자별 요청 기록
+        self.requests: Dict[str, List[datetime]] = defaultdict(list)
+        self.logger = logging.getLogger(__name__)
+
+    def is_allowed(self, identifier: str, limit: Optional[int] = None) -> bool:
+        """
+        요청 허용 여부 확인
 
         Args:
-            encrypted_data: 암호화된 데이터
+            identifier: 요청자 식별자 (IP 주소, 사용자 ID 등)
+            limit: 제한 횟수 (None이면 기본값 사용)
 
         Returns:
-            복호화된 데이터 또는 None
+            허용 여부
         """
-        if not self.cipher:
-            logger.error("암호화 키가 설정되지 않아 복호화할 수 없습니다.")
-            return None
+        if not self.enabled:
+            return True
 
-        try:
-            decrypted = self.cipher.decrypt(encrypted_data.encode())
-            return decrypted.decode()
-        except Exception as e:
-            logger.error(f"복호화 중 오류 발생: {e}")
-            return None
+        if limit is None:
+            limit = self.default_limit
 
-    @staticmethod
-    def mask_sensitive_data(data: dict) -> dict:
+        now = datetime.now()
+        cutoff_time = now - timedelta(seconds=self.window_seconds)
+
+        # 오래된 요청 기록 제거
+        self.requests[identifier] = [
+            req_time
+            for req_time in self.requests[identifier]
+            if req_time > cutoff_time
+        ]
+
+        # 제한 확인
+        if len(self.requests[identifier]) >= limit:
+            self.logger.warning(f"Rate limit 초과: {identifier} ({len(self.requests[identifier])}/{limit})")
+            return False
+
+        # 요청 기록 추가
+        self.requests[identifier].append(now)
+        return True
+
+    def get_remaining(self, identifier: str, limit: Optional[int] = None) -> int:
         """
-        민감한 데이터 마스킹
+        남은 요청 횟수 조회
 
         Args:
-            data: 마스킹할 데이터 딕셔너리
+            identifier: 요청자 식별자
+            limit: 제한 횟수
 
         Returns:
-            마스킹된 데이터 딕셔너리
+            남은 요청 횟수
         """
-        sensitive_keys = ['api_key', 'password', 'secret', 'token', 'credential']
-        masked_data = data.copy()
+        if limit is None:
+            limit = self.default_limit
 
-        for key in masked_data:
-            if any(sensitive in key.lower() for sensitive in sensitive_keys):
-                if isinstance(masked_data[key], str) and len(masked_data[key]) > 4:
-                    masked_data[key] = masked_data[key][:2] + '***' + masked_data[key][-2:]
-                else:
-                    masked_data[key] = '***'
+        now = datetime.now()
+        cutoff_time = now - timedelta(seconds=self.window_seconds)
 
-        return masked_data
+        self.requests[identifier] = [
+            req_time
+            for req_time in self.requests[identifier]
+            if req_time > cutoff_time
+        ]
 
-    @staticmethod
-    def generate_encryption_key() -> str:
+        return max(0, limit - len(self.requests[identifier]))
+
+    def reset(self, identifier: Optional[str] = None) -> None:
         """
-        새로운 암호화 키 생성
+        요청 기록 초기화
+
+        Args:
+            identifier: 요청자 식별자 (None이면 전체 초기화)
+        """
+        if identifier is None:
+            self.requests.clear()
+        else:
+            self.requests.pop(identifier, None)
+
+
+class SecurityManager:
+    """통합 보안 관리 클래스"""
+
+    def __init__(self, config: Dict[str, Any]):
+        """
+        Args:
+            config: 보안 설정
+        """
+        self.config = config
+        self.api_key_manager = APIKeyManager(config)
+        self.rate_limiter = RateLimiter(config)
+        self.logger = logging.getLogger(__name__)
+
+    def validate_request(
+        self,
+        identifier: str,
+        api_key: Optional[str] = None,
+        required_key: Optional[str] = None
+    ) -> tuple[bool, str]:
+        """
+        요청 검증
+
+        Args:
+            identifier: 요청자 식별자
+            api_key: 제공된 API 키
+            required_key: 필요한 API 키 이름
 
         Returns:
-            생성된 암호화 키
+            (검증 성공 여부, 오류 메시지)
         """
-        return Fernet.generate_key().decode()
+        # Rate Limiting 확인
+        if not self.rate_limiter.is_allowed(identifier):
+            return False, "Rate limit exceeded"
 
+        # API 키 검증
+        if required_key:
+            stored_key = self.api_key_manager.get_api_key(required_key)
+            if not stored_key:
+                return False, f"API key not found: {required_key}"
+
+            if api_key != stored_key:
+                return False, "Invalid API key"
+
+        return True, ""

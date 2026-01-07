@@ -223,6 +223,9 @@ pip install -r requirements.txt
 - [트러블슈팅 가이드](docs/TROUBLESHOOTING.md) - 문제 해결 방법
 - [FAQ](docs/FAQ.md) - 자주 묻는 질문
 - [보안 체크리스트](docs/SECURITY_CHECKLIST.md) - 보안 감사 체크리스트
+- [경쟁력 분석](docs/COMPETITIVE_ANALYSIS.md) - 경쟁 프로젝트 분석 및 경쟁력 평가
+- [경쟁력 분석 요약](docs/COMPETITIVE_ANALYSIS_SUMMARY.md) - 경쟁력 분석 핵심 요약
+- [보완 사항 체크리스트](docs/IMPROVEMENT_CHECKLIST.md) - 우선순위별 보완 사항 체크리스트
 
 ### 개발 워크플로우
 
