@@ -16,7 +16,7 @@ This repository consists of 4 main projects for implementing Responsible AI:
 ## 🎯 Project Structure
 
 ```
-responsibleai_resource/
+responsible-ai-resource/
 ├── responsible_ai_automation/    # Reinforcement Learning-based Automation System
 ├── ai-platform-validator/        # AI Platform Validation System
 ├── responsible-ai-guidelines/    # Role-based Guidelines
@@ -141,8 +141,8 @@ An open-source framework for integrating AI ethics and security policies into se
 ### 1. Clone Repository
 
 ```bash
-git clone https://github.com/yourusername/responsibleai_resource.git
-cd responsibleai_resource
+git clone https://github.com/saewookkangboy/responsible-ai-resource.git
+cd responsible-ai-resource
 ```
 
 ### 2. Install by Project

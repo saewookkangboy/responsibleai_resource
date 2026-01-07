@@ -6,8 +6,8 @@
 
 ```bash
 # 저장소 클론
-git clone https://github.com/yourusername/responsibleai_resource.git
-cd responsibleai_resource/responsible_ai_automation
+git clone https://github.com/saewookkangboy/responsible-ai-resource.git
+cd responsible-ai-resource/responsible_ai_automation
 
 # 가상 환경 생성 (권장)
 python -m venv venv

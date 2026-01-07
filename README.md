@@ -7,7 +7,7 @@ AI 윤리와 Responsible AI 원칙을 적용하기 위한 종합 리소스 모�
 
 ## 🌐 언어 선택 / Language Selection
 
-**[한국어 (기본)](#한국어-버전-default) | [English](https://github.com/saewookkangboy/responsibleai_resource/blob/main/README_EN.md)**
+**[한국어 (기본)](#한국어-버전-default) | [English](https://github.com/saewookkangboy/responsible-ai-resource/blob/main/README_EN.md)**
 
 ---
 
@@ -33,7 +33,7 @@ This open source project was written and structured based on Cursor AI.
 ## 🎯 프로젝트 구조
 
 ```
-responsibleai_resource/
+responsible-ai-resource/
 ├── responsible_ai_automation/    # 강화 학습 기반 자동화 시스템
 ├── ai-platform-validator/        # AI 플랫폼 검증 시스템
 ├── responsible-ai-guidelines/    # 역할별 가이드라인
@@ -151,8 +151,8 @@ AI 윤리와 Responsible AI 원칙을 자동으로 학습, 최적화, 적용하�
 
 ```bash
 # 저장소 클론
-git clone https://github.com/yourusername/responsibleai_resource.git
-cd responsibleai_resource/responsible_ai_automation
+git clone https://github.com/saewookkangboy/responsible-ai-resource.git
+cd responsible-ai-resource/responsible_ai_automation
 
 # 의존성 설치
 pip install -r requirements.txt
@@ -166,8 +166,8 @@ python quick_start.py
 ### 1. 저장소 클론
 
 ```bash
-git clone https://github.com/yourusername/responsibleai_resource.git
-cd responsibleai_resource
+git clone https://github.com/saewookkangboy/responsible-ai-resource.git
+cd responsible-ai-resource
 ```
 
 ### 2. 프로젝트별 설치

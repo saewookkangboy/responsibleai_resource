@@ -10,8 +10,8 @@
 
 ```bash
 # 1. 저장소 클론
-git clone https://github.com/yourusername/responsibleai_resource.git
-cd responsibleai_resource/responsible_ai_automation
+git clone https://github.com/saewookkangboy/responsible-ai-resource.git
+cd responsible-ai-resource/responsible_ai_automation
 
 # 2. 가상 환경 생성 (권장)
 python -m venv venv
@@ -155,7 +155,7 @@ docker run -p 8080:8080 responsible-ai-automation
 
 ```python
 !pip install numpy pandas scikit-learn pyyaml
-!git clone https://github.com/yourusername/responsibleai_resource.git
+!git clone https://github.com/saewookkangboy/responsible-ai-resource.git
 ```
 
 ### AWS SageMaker
