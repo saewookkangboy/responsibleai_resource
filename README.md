@@ -1,5 +1,8 @@
 # Responsible AI Resource Collection
 
+<img width="2752" height="1536" alt="Responsible+AI+Tool+kit" src="https://github.com/user-attachments/assets/a102cc6b-c94f-45cd-8f65-44f41b0f190b" />
+
+
 AI 윤리와 Responsible AI 원칙을 적용하기 위한 종합 리소스 모음입니다.
 
 ## 🌐 언어 선택 / Language Selection
