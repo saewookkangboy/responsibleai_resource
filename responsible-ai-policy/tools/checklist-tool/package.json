@@ -1,0 +1,24 @@
+{
+  "name": "responsible-ai-checklist-tool",
+  "version": "1.0.0",
+  "description": "Responsible AI 체크리스트 도구",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "check": "node index.js --check",
+    "interactive": "node index.js --interactive"
+  },
+  "keywords": [
+    "responsible-ai",
+    "checklist",
+    "validation"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "inquirer": "^9.2.12",
+    "chalk": "^5.3.0"
+  }
+}
+

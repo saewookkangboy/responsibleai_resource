@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsible AI 웹 서비스 예제</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Responsible AI 웹 서비스 예제</h1>
+            <p class="ai-notice">⚠️ 이 서비스는 AI 기술을 사용합니다. 자세한 내용은 <a href="#privacy">프라이버시 정책</a>을 참조하세요.</p>
+        </header>
+
+        <main>
+            <section class="ai-feature">
+                <h2>AI 기능 사용</h2>
+                <div class="consent-section">
+                    <label>
+                        <input type="checkbox" id="aiConsent">
+                        AI 기능 사용에 동의합니다. (필수)
+                    </label>
+                    <p class="consent-info">AI 기능은 사용자 경험 개선을 위해 사용됩니다. 데이터는 암호화되어 처리되며, 사용자 동의 없이 제3자와 공유되지 않습니다.</p>
+                </div>
+
+                <div class="input-section">
+                    <label for="userInput">텍스트 입력:</label>
+                    <textarea id="userInput" placeholder="AI가 처리할 텍스트를 입력하세요..." rows="4"></textarea>
+                    <button id="processBtn" disabled>처리하기</button>
+                </div>
+
+                <div class="output-section" id="outputSection" style="display: none;">
+                    <h3>처리 결과:</h3>
+                    <div id="output"></div>
+                    <div class="explanation">
+                        <h4>AI 의사결정 설명:</h4>
+                        <p id="explanation"></p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="privacy-settings" id="privacy">
+                <h2>프라이버시 설정</h2>
+                <div class="settings-grid">
+                    <div class="setting-item">
+                        <label>
+                            <input type="checkbox" id="dataCollection">
+                            데이터 수집 허용
+                        </label>
+                        <p class="setting-desc">서비스 개선을 위한 익명화된 데이터 수집</p>
+                    </div>
+                    <div class="setting-item">
+                        <label>
+                            <input type="checkbox" id="analytics">
+                            분석 데이터 수집
+                        </label>
+                        <p class="setting-desc">사용 패턴 분석을 위한 데이터 수집</p>
+                    </div>
+                    <div class="setting-item">
+                        <label>
+                            <input type="checkbox" id="personalization">
+                            개인화 기능
+                        </label>
+                        <p class="setting-desc">맞춤형 경험을 위한 개인화</p>
+                    </div>
+                </div>
+                <button id="saveSettings">설정 저장</button>
+            </section>
+
+            <section class="data-management">
+                <h2>데이터 관리</h2>
+                <div class="data-actions">
+                    <button id="viewData">내 데이터 보기</button>
+                    <button id="exportData">데이터 내보내기</button>
+                    <button id="deleteData" class="danger">데이터 삭제</button>
+                </div>
+                <div id="dataInfo" class="data-info"></div>
+            </section>
+        </main>
+
+        <footer>
+            <p><a href="#privacy">프라이버시 정책</a> | <a href="#terms">이용 약관</a> | <a href="#contact">문의하기</a></p>
+            <p class="disclaimer">이 서비스는 예제 목적으로 제공됩니다. 실제 사용 시 법률 전문가와 상담하시기 바랍니다.</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
+

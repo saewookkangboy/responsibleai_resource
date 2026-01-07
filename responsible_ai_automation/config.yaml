@@ -1,0 +1,87 @@
+# Responsible AI 자동화 시스템 설정
+
+# 평가 설정
+evaluation:
+  fairness:
+    metrics: ["demographic_parity", "equalized_odds", "equal_opportunity"]
+    threshold: 0.1  # 허용 가능한 차이 임계값
+    sensitive_attributes: ["gender", "race", "age"]
+  
+  transparency:
+    metrics: ["explainability_score", "model_complexity", "feature_importance"]
+    threshold: 0.7  # 최소 투명성 점수
+  
+  accountability:
+    metrics: ["audit_trail", "decision_logging", "error_tracking"]
+    enabled: true
+  
+  privacy:
+    metrics: ["differential_privacy", "data_anonymization", "access_control"]
+    threshold: 0.8
+  
+  robustness:
+    metrics: ["adversarial_robustness", "out_of_distribution_detection"]
+    threshold: 0.75
+
+# 강화 학습 설정
+reinforcement_learning:
+  algorithm: "PPO"  # PPO, SAC, TD3 등
+  learning_rate: 3e-4
+  batch_size: 64
+  buffer_size: 100000
+  gamma: 0.99  # 할인 계수
+  tau: 0.005  # 소프트 업데이트 계수
+  training_steps: 100000
+  evaluation_frequency: 1000
+  save_frequency: 5000
+
+# 자동 업데이트 설정
+auto_update:
+  enabled: true
+  check_interval: 3600  # 초 단위 (1시간)
+  
+  # 업데이트 조건
+  conditions:
+    # 성능 임계값 하회 시
+    performance_degradation:
+      threshold: 0.05  # 5% 이상 성능 저하
+      action: "update"
+    
+    # 윤리 지표 임계값 하회 시
+    ethics_threshold_breach:
+      threshold: 0.1  # 윤리 지표가 임계값보다 10% 낮을 때
+      action: "update"
+    
+    # 새로운 데이터 분포 감지 시
+    distribution_shift:
+      threshold: 0.2  # 분포 변화 20% 이상
+      action: "update"
+    
+    # 정기 업데이트
+    scheduled:
+      frequency: "weekly"  # weekly, monthly
+      action: "update"
+  
+  # 롤백 설정
+  rollback:
+    enabled: true
+    max_rollback_attempts: 3
+    performance_threshold: 0.95  # 이전 성능의 95% 미만이면 롤백
+
+# 모니터링 설정
+monitoring:
+  enabled: true
+  dashboard_port: 8080
+  log_level: "INFO"
+  metrics_retention_days: 30
+  alert_channels:
+    - "console"
+    # - "email"
+    # - "slack"
+
+# 모델 설정
+model:
+  save_path: "./models"
+  checkpoint_frequency: 1000
+  max_checkpoints: 10
+
