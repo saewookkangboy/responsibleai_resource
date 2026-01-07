@@ -12,6 +12,13 @@ Responsible AI Resource 프로젝트의 개발 로드맵입니다.
 - [x] P1: 대규모 데이터 처리 최적화
 - [x] P1: 확장 가능한 대시보드
 - [x] P1: 보안 강화
+- [x] **🆕 P1: Microsoft RAI Toolbox 스타일 컴포넌트 추가**
+  - [x] Error Analysis 모듈
+  - [x] Counterfactual Analysis (DiCE) 모듈
+  - [x] Causal Analysis (EconML) 모듈
+  - [x] Data Balance 분석 모듈
+  - [x] Responsible AI Dashboard 통합
+  - [x] Jupyter Notebook 튜토리얼
 
 ### 진행 중 🔄
 - [ ] P2: 커뮤니티 구축
@@ -57,12 +64,18 @@ Responsible AI Resource 프로젝트의 개발 로드맵입니다.
 
 ## 📊 진행 상황
 
-### 현재 버전: 0.1.0 (Alpha)
+### 현재 버전: 0.2.0 (Alpha)
 
 **완료율**:
 - P0: 100% ✅
 - P1: 100% ✅
-- P2: 30% 🔄
+- P2: 40% 🔄
+
+**주요 업데이트 (v0.2.0)**:
+- Microsoft RAI Toolbox 스타일 컴포넌트 추가
+- Error Analysis, Counterfactual, Causal Analysis, Data Balance 모듈
+- Responsible AI Dashboard 통합
+- Jupyter Notebook 튜토리얼 추가
 
 **다음 마일스톤**: M3 (커뮤니티 및 규제 준수) - 2026 Q2
 

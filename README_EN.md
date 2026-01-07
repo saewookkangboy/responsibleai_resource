@@ -27,11 +27,19 @@ responsibleai_resource/
 
 A reinforcement learning-based system that automatically learns, optimizes, and applies AI ethics and Responsible AI principles.
 
+> **🆕 v0.2.0**: New analysis components in [Microsoft Responsible AI Toolbox](https://github.com/microsoft/responsible-ai-toolbox) style have been added!
+
 ### Key Features
 
 - **Comprehensive Responsible AI Evaluation Framework**
   - Fairness, Transparency, Accountability
   - Privacy, Robustness evaluation
+- **🆕 Microsoft RAI Toolbox Style Components**
+  - **Error Analysis**: Model error analysis and cohort identification
+  - **Counterfactual Analysis**: Counterfactual explanations (DiCE-based)
+  - **Causal Analysis**: Causal relationship analysis (EconML-based)
+  - **Data Balance**: Data balance analysis
+  - **Responsible AI Dashboard**: Integrated analysis dashboard
 - **Reinforcement Learning-based Auto-optimization** (PPO Algorithm)
 - **Intelligent Auto-update System**
 - **Real-time Monitoring and Alerts**
@@ -173,6 +181,13 @@ pip install -r requirements.txt
 - ✅ CI/CD pipeline
 - ✅ Security utilities
 - ✅ Performance optimization
+- ✅ **🆕 Microsoft RAI Toolbox Style Components**
+  - ✅ Error Analysis module
+  - ✅ Counterfactual Analysis (DiCE) module
+  - ✅ Causal Analysis (EconML) module
+  - ✅ Data Balance analysis module
+  - ✅ Responsible AI Dashboard integration
+  - ✅ Jupyter Notebook tutorials
 
 ### In Development
 
@@ -264,12 +279,36 @@ This software was developed with assistance from Cursor AI
 
 **This open source project can be used in all commercial and non-commercial areas.**
 
+## 📓 Jupyter Notebook Examples
+
+Check out tutorial notebooks in the `notebooks/` directory:
+
+- **01_responsible_ai_dashboard_tutorial.ipynb** - Comprehensive Responsible AI Dashboard Tutorial
+
 ## 🔗 References
 
-- [Microsoft Responsible AI](https://www.microsoft.com/en-us/ai/responsible-ai)
-- [Google AI Principles](https://ai.google/principles/)
-- [EU AI Act](https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai)
-- [IEEE Ethically Aligned Design](https://ethicsinaction.ieee.org/)
+### Microsoft
+- [Microsoft Responsible AI Toolbox](https://github.com/microsoft/responsible-ai-toolbox) - Main reference for this project
+- [Microsoft Responsible AI](https://www.microsoft.com/ko-kr/ai/responsible-ai) - Microsoft's Responsible AI Principles
+- [Responsible AI Toolbox Dashboard](https://responsibleaitoolbox.ai/) - RAI Toolbox Official Site
+- [DiCE - Counterfactual Explanations](https://github.com/interpretml/DiCE)
+- [EconML - Causal Inference](https://github.com/microsoft/EconML)
+
+### Google
+- [Google AI Principles](https://ai.google/principles/) - Google AI Principles
+- [Google Responsible AI Research](https://research.google/teams/responsible-ai/) - Google Responsible AI Research Team
+- [Vertex AI Safety Overview](https://docs.cloud.google.com/vertex-ai/generative-ai/docs/learn/safety-overview?hl=ko) - Vertex AI Safety Overview
+
+### AWS
+- [AWS Responsible AI](https://aws.amazon.com/ko/ai/responsible-ai/) - AWS Responsible AI
+
+### IBM
+- [IBM Responsible AI](https://www.ibm.com/think/topics/responsible-ai) - IBM Responsible AI
+
+### Others
+- [Center for Responsible AI](https://centerforresponsible.ai/resources-and-insights/) - Center for Responsible AI Resources
+- [EU AI Act](https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai) - EU AI Regulatory Framework
+- [IEEE Ethically Aligned Design](https://ethicsinaction.ieee.org/) - IEEE Ethical Design
 
 ## ⚠️ Disclaimer
 
@@ -313,6 +352,14 @@ These tools help automatically evaluate and optimize Responsible AI principles, 
 4. **Performance Optimization** ✅
    - [Performance Optimization Utility](responsible_ai_automation/src/utils/performance.py) - Parallel processing, caching mechanisms, streaming evaluation
    - Large-scale data processing optimization
+
+5. **🆕 Microsoft RAI Toolbox Style Components** ✅
+   - [Error Analysis](responsible_ai_automation/src/evaluation/error_analysis.py) - Model error analysis and cohort identification
+   - [Counterfactual Analysis](responsible_ai_automation/src/evaluation/counterfactual.py) - DiCE-based counterfactual explanations
+   - [Causal Analysis](responsible_ai_automation/src/evaluation/causal_analysis.py) - EconML-based causal inference
+   - [Data Balance](responsible_ai_automation/src/evaluation/data_balance.py) - Data balance and fairness analysis
+   - [Responsible AI Dashboard](responsible_ai_automation/src/dashboard/rai_dashboard.py) - Integrated analysis dashboard
+   - [Tutorial Notebook](notebooks/01_responsible_ai_dashboard_tutorial.ipynb) - Jupyter notebook tutorial
 
 ---
 
