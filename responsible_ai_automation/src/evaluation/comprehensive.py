@@ -11,6 +11,7 @@ from .transparency import TransparencyEvaluator
 from .accountability import AccountabilityEvaluator
 from .privacy import PrivacyEvaluator
 from .robustness import RobustnessEvaluator
+from .social_impact import SocialImpactEvaluator
 
 
 class ComprehensiveEvaluator:
@@ -36,6 +37,7 @@ class ComprehensiveEvaluator:
         self.accountability_evaluator = AccountabilityEvaluator(config)
         self.privacy_evaluator = PrivacyEvaluator(config)
         self.robustness_evaluator = RobustnessEvaluator(config)
+        self.social_impact_evaluator = SocialImpactEvaluator(config)
 
         # 가중치 설정
         self.weights = config.get("weights", self.DEFAULT_WEIGHTS)
@@ -90,6 +92,12 @@ class ComprehensiveEvaluator:
             model, X, y, X_test=kwargs.get("X_test")
         )
         results["robustness"] = robustness_results
+
+        # 사회적 영향 평가
+        social_impact_results = self.social_impact_evaluator.evaluate(
+            model, X, y, y_pred, sensitive_features, **kwargs
+        )
+        results["social_impact"] = social_impact_results
 
         # 종합 점수 계산
         overall_score = self._calculate_overall_score(results)

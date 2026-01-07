@@ -8,6 +8,7 @@ from .transparency import TransparencyEvaluator
 from .accountability import AccountabilityEvaluator
 from .privacy import PrivacyEvaluator
 from .robustness import RobustnessEvaluator
+from .social_impact import SocialImpactEvaluator
 
 __all__ = [
     "ComprehensiveEvaluator",
@@ -16,5 +17,6 @@ __all__ = [
     "AccountabilityEvaluator",
     "PrivacyEvaluator",
     "RobustnessEvaluator",
+    "SocialImpactEvaluator",
 ]
 

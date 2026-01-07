@@ -160,3 +160,47 @@ class PerformanceOptimizer:
         indices = rng.choice(len(data), sample_size, replace=False)
         return data[indices]
 
+    @staticmethod
+    def stream_evaluate(
+        evaluator_func: Callable,
+        data_stream: Any,
+        batch_size: int = 1000,
+        accumulate_results: bool = True
+    ) -> List[Any]:
+        """
+        스트리밍 평가 수행 (메모리 효율적)
+
+        Args:
+            evaluator_func: 평가 함수
+            data_stream: 데이터 스트림 (이터레이터)
+            batch_size: 배치 크기
+            accumulate_results: 결과 누적 여부
+
+        Returns:
+            평가 결과 리스트 또는 제너레이터
+        """
+        results = []
+        
+        batch = []
+        for item in data_stream:
+            batch.append(item)
+            
+            if len(batch) >= batch_size:
+                batch_results = evaluator_func(batch)
+                if accumulate_results:
+                    results.extend(batch_results)
+                else:
+                    yield batch_results
+                batch = []
+        
+        # 남은 배치 처리
+        if batch:
+            batch_results = evaluator_func(batch)
+            if accumulate_results:
+                results.extend(batch_results)
+            else:
+                yield batch_results
+        
+        if accumulate_results:
+            return results
+
