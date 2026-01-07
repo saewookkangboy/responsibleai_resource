@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  responsible-ai-automation:
+    build:
+      context: ./responsible_ai_automation
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - LOG_LEVEL=INFO
+      - DASHBOARD_PORT=8080
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./responsible_ai_automation/models:/app/models
+      - ./responsible_ai_automation/config.yaml:/app/config.yaml
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8080/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  ai-platform-validator:
+    build:
+      context: ./ai-platform-validator
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    environment:
+      - LOG_LEVEL=INFO
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped
+
