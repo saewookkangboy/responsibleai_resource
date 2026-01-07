@@ -255,7 +255,7 @@ pip install -r requirements.txt
 
 ## 📄 라이선스
 
-Copyright (c) 2025 Park Chunghyo
+Copyright (c) 2026 Park Chunghyo
 
 & MIT License
 
@@ -500,7 +500,7 @@ Each project can be contributed to independently. Please refer to each project's
 
 ## 📄 License
 
-Copyright (c) 2025 Park Chunghyo
+Copyright (c) 2026 Park Chunghyo
 
 & MIT License
 

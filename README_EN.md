@@ -129,7 +129,7 @@ We welcome contributions! Please see [Community Guidelines](.github/COMMUNITY_GU
 
 ## 📄 License
 
-Copyright (c) 2025 Park Chunghyo
+Copyright (c) 2026 Park Chunghyo
 
 & MIT License
 
